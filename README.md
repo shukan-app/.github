@@ -24,4 +24,4 @@ Shukan (就管・習慣) は、就職活動における煩雑な管理を本人�
 
 ## アーキテクチャ
 
-<img src="表示させたい画像のURL" alt="アーキテクチャ図">
+<img src="https://github.com/shukan-app/.github/blob/main/assets/system-architecture.jpg?raw=true" alt="アーキテクチャ図">
