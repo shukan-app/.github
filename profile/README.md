@@ -22,6 +22,38 @@ Shukan (就管・習慣) は、就職活動における煩雑な管理を本人�
 - マイページからのみ返信可能。
 - 基本的にマイページを利用しているが、返信はメールで行う必要がある。
 
+### 目的
+
+基本的なコンセプトとして、AIを活用することで先述の課題を解決するのが目的です。
+
+- ユーザーのGmailから就活関連のメールを自動的に抽出し、サービスに必要な情報のみを登録することで、安全かつ自動で情報を確認できるようにする。
+- 会社からのスカウトを一元管理し、就活サービスをまたいで確認できるようにする。
+- 会社別に選考の状態を管理し、迫っている期限や次のイベント日時などを簡単に確認できるようにする。
+- 会社別に、返信先や利用サービスをAIで判別し、ユーザーの管理なく簡単にわかるようにする。
+- 会社別に、今後のアクションやしなければならないタスクを自動で管理し、ユーザーがそのアクション・タスクに集中できるようにする。
+
 ## アーキテクチャ
 
 <img src="https://github.com/shukan-app/.github/blob/main/assets/system-architecture.jpg?raw=true" alt="アーキテクチャ図">
+
+## 技術選定
+
+- Firestore Authentication: 認証・認可の基盤として導入した。
+- Cloud Messaging: Pub/Subを実現するため、プッシュ通知を送信するために導入した。
+- Key Management Service: OAuthのトークンを管理するために導入した。
+- Gmail API: ユーザーのメールの内容を読み取るために導入した。（読み取り専用・テストモード）
+- Vertex AI: メールの内容からメール種別の判定やタスクやイベントの日時などを取得するために導入した。
+- Neon: Google CloudのPostgreSQL用DBは価格が高いので、代替として導入した。
+- Upstash: Redisでキャッシュを管理するために導入した。
+- API Server (Cloud Run)
+  - Javalin: JavaのWebフレームワーク。アノテーションやリフレクションを使用せず、明示的に処理を記述できるので採用した。
+  - JUnit: 単体テストのために導入した。
+  - JSpecify / Nullaway: JavaでNull安全性を担保するために導入した。
+  - ArchUnit: AI Agentに開発を委任する際に、アーキテクチャを無視して実装できないようにするために導入した。
+  - Testcontainers: PostgresやRedisを用いたテストを行うために導入した。
+  - PostgreSQL JDBC Driver: 明示的にDBを操作するために導入した。
+  - Firebase Admin SDK: Firebaseを扱うために導入した。
+  - Flyway: DBのマイグレーションを管理するために導入した。
+- Firestore / Cloud Scheduler / Cloud Tasks: 通知機能を実現するために導入した。
+- Secret Manager: 環境変数を管理するために導入した。
+- Cloudflare: DNS, CDNおよびセキュリティ基盤として導入した。
